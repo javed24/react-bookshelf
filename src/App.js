@@ -1,19 +1,41 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
+  constructor(props){
+    super(props);
+    this.state = {
+      showSearchPage: false,
+      bookNames: []
+    }
+  }
+  // state = {
+  //   /**
+  //    * TODO: Instead of using this state variable to keep track of which page
+  //    * we're on, use the URL in the browser's address bar. This will ensure that
+  //    * users can use the browser's back and forward buttons to navigate between
+  //    * pages, as well as provide a good URL they can bookmark and share.
+  //    */
+  //   showSearchPage: false,
+  //   bookName: ''
+  // }
+
+  componentDidMount(){ 
+    let temp_array = [];
+    let book_name = BooksAPI.getAll().then((array) => {
+      array.map( (book) => {
+          temp_array.push(book.title)
+      })
+      this.setState({
+        bookNames: temp_array
+      });
+    });       
   }
 
   render() {
+    let book_array = this.state.bookNames;
+    console.log("inside render: "+ book_array[0]);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -62,8 +84,20 @@ class BooksApp extends React.Component {
                               </select>
                             </div>
                           </div>
+                          <ul>
+                            
+                              {book_array.map(function(book, index){
+                                return (
+                                  <div>
+                                    <li>{book}</li>
+                                  </div>
+                                );
+                              })}
+                            
+                          </ul>
                           <div className="book-title">To Kill a Mockingbird</div>
                           <div className="book-authors">Harper Lee</div>
+                          <div>{this.state.bookName}</div>
                         </div>
                       </li>
                       <li>
@@ -80,7 +114,7 @@ class BooksApp extends React.Component {
                               </select>
                             </div>
                           </div>
-                          <div className="book-title">Ender's Game</div>
+                          <div className="book-title">Enders Game</div>
                           <div className="book-authors">Orson Scott Card</div>
                         </div>
                       </li>
@@ -123,7 +157,7 @@ class BooksApp extends React.Component {
                               </select>
                             </div>
                           </div>
-                          <div className="book-title">Harry Potter and the Sorcerer's Stone</div>
+                          <div className="book-title">Harry Potter and the Sorcerers Stone</div>
                           <div className="book-authors">J.K. Rowling</div>
                         </div>
                       </li>
@@ -166,7 +200,7 @@ class BooksApp extends React.Component {
                               </select>
                             </div>
                           </div>
-                          <div className="book-title">Oh, the Places You'll Go!</div>
+                          <div className="book-title">Oh, the Places Youll Go!</div>
                           <div className="book-authors">Seuss</div>
                         </div>
                       </li>
