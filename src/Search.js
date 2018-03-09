@@ -1,4 +1,5 @@
 import React from 'react';
+import * as BooksAPI from './BooksAPI';
 import './App.css';
 import BooksApp from './App';
 
@@ -14,11 +15,20 @@ class Search extends React.Component{
         this.state = {
             showSearchPage: true
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
-    handleChange(event){
+    handleSearch(event){
         console.log(event.target.value);
+        let query = event.target.value;
+        BooksAPI.search(query).then((array) => {
+            array.map( (book) => {
+                console.log(book.title);
+                
+            });
+        });
     }
+    
+
     render(){
         return(
             <div>
@@ -41,7 +51,7 @@ class Search extends React.Component{
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title  or author" onChange = {this.handleChange}/>
+                <input type="text" placeholder="Search by title  or author" onChange = {this.handleSearch}/>
               </div>
             </div>
             <div className="search-books-results">
