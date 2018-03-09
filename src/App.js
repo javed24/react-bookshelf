@@ -12,16 +12,29 @@ class BooksApp extends React.Component {
       wantToReadBooks :[],
       readBooks: []
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleGetAll = this.handleGetAll.bind(this);
   }
   
-  componentDidMount(){ 
+  componentDidMount(){    
+    this.handleGetAll();       
+  }
+  handleChange(event, book){
+    console.log("handling change: "+ event.target.value);
+    console.log("book checker: "+book.id);
+    BooksAPI.update(book, event.target.value).then((array) =>{
+      //console.log("response: "+JSON.stringify(array.shelf));
+      this.handleGetAll();  
+    });
+  }
+
+  handleGetAll(){
     let temp_array = [];
     let shelf_type ="";
     let currentlyReading = [];
     let wantToRead = [];
     let read = [];
-    
-    let bookName = BooksAPI.getAll().then((array) => {
+    BooksAPI.getAll().then((array) => {
       console.log("stringified response: "+JSON.stringify(array))
       array.map( (book) => {
         shelf_type = book.shelf
@@ -56,17 +69,18 @@ class BooksApp extends React.Component {
           }
           
       })
-      console.log("Currently Reading: " + currentlyReading)
-      console.log("Want to Read: " + wantToRead)
-      console.log("Read: " + read)
+      // console.log("Currently Reading: " + currentlyReading)
+      // console.log("Want to Read: " + wantToRead)
+      // console.log("Read: " + read)
       this.setState({
         bookNames: temp_array,
         currentlyReadingBooks: currentlyReading,
         wantToReadBooks: wantToRead,
         readBooks: read
       });
-    });       
+    })
   }
+  
 
   render() {
     let currentlyReading = this.state.currentlyReadingBooks;
@@ -109,16 +123,16 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                     {currentlyReading.map(function(book, index){
                         let src = book.img
-                        console.log(src+"........")
+                        //console.log(src+"........")
                               return (
                                 <li>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select onChange = {(e) => this.handleChange(e, book)} value = "currentlyReading">
                                 <option value="none" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
+                                <option value="currentlyReading" >Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
                                 <option value="read">Read</option>
                                 <option value="none">None</option>
@@ -132,7 +146,7 @@ class BooksApp extends React.Component {
                         </div>
                       </li>
                               );
-                            })}
+                            }, this)}
                      
                     </ol>
                   </div>
@@ -143,14 +157,14 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                     {wantToRead.map(function(book, index){
                         let src = book.img
-                        console.log(src+"........")
+                        //console.log(src+"........")
                               return (
                                 <li>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select onChange = {(e) => this.handleChange(e, book)} value = "wantToRead">
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -166,7 +180,7 @@ class BooksApp extends React.Component {
                         </div>
                       </li>
                               );
-                            })}
+                            }, this)}
                      
                     </ol>
                   </div>
@@ -177,14 +191,14 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                     {read.map(function(book, index){
                         let src = book.img
-                        console.log(src+"........")
+                        //console.log(src+"........")
                               return (
                                 <li>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select onChange = {(e) => this.handleChange(e, book)} value = "read">
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -200,7 +214,7 @@ class BooksApp extends React.Component {
                         </div>
                       </li>
                               );
-                            })}
+                            }, this)}
                      
                     </ol>
                   </div>
