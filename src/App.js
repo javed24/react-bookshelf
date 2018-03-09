@@ -1,6 +1,13 @@
-import React from 'react'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
+import React from 'react';
+import * as BooksAPI from './BooksAPI';
+import './App.css';
+import Search from './Search';
+
+var ReactRouter = require('react-router-dom');
+var Router = ReactRouter.BrowserRouter;
+var Route = ReactRouter.Route;
+var Switch = ReactRouter.Switch;
+var Link = require('react-router-dom').Link;
 
 class BooksApp extends React.Component {
   constructor(props){
@@ -20,8 +27,8 @@ class BooksApp extends React.Component {
     this.handleGetAll();       
   }
   handleChange(event, book){
-    console.log("handling change: "+ event.target.value);
-    console.log("book checker: "+book.id);
+    //console.log("handling change: "+ event.target.value);
+    //console.log("book checker: "+book.id);
     BooksAPI.update(book, event.target.value).then((array) =>{
       //console.log("response: "+JSON.stringify(array.shelf));
       this.handleGetAll();  
@@ -35,11 +42,11 @@ class BooksApp extends React.Component {
     let wantToRead = [];
     let read = [];
     BooksAPI.getAll().then((array) => {
-      console.log("stringified response: "+JSON.stringify(array))
+      //console.log("stringified response: "+JSON.stringify(array))
       array.map( (book) => {
         shelf_type = book.shelf
           temp_array.push(book.title)
-          console.log("Shelf type: "+ shelf_type)
+          //console.log("Shelf type: "+ shelf_type)
           if(shelf_type === "currentlyReading"){
               currentlyReading.push({
                 id: book.id,
@@ -68,7 +75,7 @@ class BooksApp extends React.Component {
               })
           }
           
-      })
+      });
       // console.log("Currently Reading: " + currentlyReading)
       // console.log("Want to Read: " + wantToRead)
       // console.log("Read: " + read)
@@ -90,26 +97,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
+          <Search/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
@@ -125,12 +113,12 @@ class BooksApp extends React.Component {
                         let src = book.img
                         //console.log(src+"........")
                               return (
-                                <li>
+                                <li key={index}>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select onChange = {(e) => this.handleChange(e, book)} value = "currentlyReading">
+                              <select onChange={(e) => this.handleChange(e, book)} value="currentlyReading">
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading" >Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -159,12 +147,12 @@ class BooksApp extends React.Component {
                         let src = book.img
                         //console.log(src+"........")
                               return (
-                                <li>
+                                <li key={index}>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select onChange = {(e) => this.handleChange(e, book)} value = "wantToRead">
+                              <select onChange={(e) => this.handleChange(e, book)} value="wantToRead">
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -193,12 +181,12 @@ class BooksApp extends React.Component {
                         let src = book.img
                         //console.log(src+"........")
                               return (
-                                <li>
+                                <li key={index}>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select onChange = {(e) => this.handleChange(e, book)} value = "read">
+                              <select onChange={(e) => this.handleChange(e, book)} value="read">
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -221,9 +209,11 @@ class BooksApp extends React.Component {
                 </div>
               </div>
             </div>
+            <Router>
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <Link to = {'./Search'} onClick={() => this.setState({ showSearchPage: true })}> Add a book </Link>
             </div>
+            </Router>
           </div>
         )}
       </div>
