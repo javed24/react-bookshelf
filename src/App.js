@@ -5,8 +5,8 @@ import Search from './Search';
 
 var ReactRouter = require('react-router-dom');
 var Router = ReactRouter.BrowserRouter;
-var Route = ReactRouter.Route;
-var Switch = ReactRouter.Switch;
+//var Route = ReactRouter.Route;
+//var Switch = ReactRouter.Switch;
 var Link = require('react-router-dom').Link;
 
 class BooksApp extends React.Component {
