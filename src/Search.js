@@ -14,6 +14,7 @@ class Search extends React.Component{
             searchResults: []
         }
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     handleSearch(event){
         let query = event.target.value;
@@ -61,7 +62,7 @@ class Search extends React.Component{
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${src})` }}></div>
                             <div className="book-shelf-changer">
-                              <select onChange={(e) => this.handleChange(e, book)}>
+                              <select value="none" onChange={(e) => this.handleChange(e, book)}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading" >Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
